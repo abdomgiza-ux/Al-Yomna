@@ -199,6 +199,7 @@
 
     var search = $("#searchInput");
     var brandFilter = $("#brandFilter");
+    var categoryFilter = $("#categoryFilter");
     var count = $("#resultsCount");
     var empty = $("#emptyState");
 
@@ -211,14 +212,36 @@
       }
     });
 
+    if (categoryFilter) {
+      var seenCategories = {};
+      products.forEach(function (product) {
+        if (!product.category || seenCategories[product.category]) return;
+        seenCategories[product.category] = true;
+        var option = document.createElement("option");
+        option.value = product.category;
+        option.textContent = product.category;
+        categoryFilter.appendChild(option);
+      });
+    }
+
+    // Allow deep links such as products.html?brand=Ricoh or ?q=5503
+    var params = new URLSearchParams(location.search);
+    var brandParam = params.get("brand");
+    if (brandParam && brands.indexOf(brandParam) > -1) brandFilter.value = brandParam;
+    var queryParam = params.get("q");
+    if (queryParam) search.value = queryParam.slice(0, 80);
+
     function render() {
       var term = (search.value || "").trim().toLowerCase();
       var brand = brandFilter.value;
+      var category = categoryFilter ? categoryFilter.value : "";
       var filtered = products.filter(function (product) {
         var searchable = (
           product.brand + " " + product.model + " " + product.category + " " + product.description
         ).toLowerCase();
-        return (!brand || product.brand === brand) && (!term || searchable.indexOf(term) > -1);
+        return (!brand || product.brand === brand) &&
+          (!category || product.category === category) &&
+          (!term || searchable.indexOf(term) > -1);
       });
       grid.innerHTML = filtered.map(productCard).join("");
       count.textContent = filtered.length;
@@ -228,6 +251,7 @@
 
     search.addEventListener("input", debounce(render, 200));
     brandFilter.addEventListener("change", render);
+    if (categoryFilter) categoryFilter.addEventListener("change", render);
     render();
   }
 
@@ -241,7 +265,7 @@
       var id = brand.toLowerCase().replace(/\s+/g, "-");
       return [
         '<section class="brand-block reveal" id="' + escapeAttr(id) + '">',
-        '<div class="brand-block-head"><div><p class="eyebrow">ماركة</p><h2>' + escapeHtml(brand) + '</h2></div><a class="text-link" href="products.html">عرض الكتالوج</a></div>',
+        '<div class="brand-block-head"><div><p class="eyebrow">ماركة</p><h2>' + escapeHtml(brand) + '</h2></div><a class="text-link" href="products.html?brand=' + encodeURIComponent(brand) + '">عرض الكتالوج</a></div>',
         '<div class="mini-products">',
         items.map(function (product) {
           var label = product.brand + " " + product.model;
