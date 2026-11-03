@@ -47,7 +47,7 @@
     document.getElementById("crumb").textContent = p.name;
 
     document.getElementById("detail").innerHTML =
-      '<div class="detail-media"><img src="' + esc(p.image) + '" alt="' + esc(p.name) + '" width="600" height="600"></div>' +
+      '<div class="detail-media"><div class="marks" aria-hidden="true"></div><div class="detail-sheet"><img src="' + esc(p.image) + '" alt="' + esc(p.name) + '" width="600" height="600"></div></div>' +
       "<div>" +
       '<span class="detail-brand">' + esc(p.brand) + "</span>" +
       "<h1>" + esc(p.model) + "</h1>" +
@@ -61,7 +61,7 @@
 
     var rel = products.filter(function (x) { return x.brand === p.brand && x.id !== p.id && x.kind === p.kind; }).slice(0, 4);
     if (rel.length) {
-      document.getElementById("related").innerHTML = rel.map(window.productCard).join("");
+      document.getElementById("related").innerHTML = rel.map(window.productRow).join("");
       document.getElementById("relWrap").hidden = false;
     }
   });

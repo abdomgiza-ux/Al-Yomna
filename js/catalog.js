@@ -47,7 +47,7 @@
         }
         return true;
       });
-      grid.innerHTML = list.map(window.productCard).join("");
+      grid.innerHTML = list.map(window.productRow).join("");
       count.textContent = list.length;
       empty.hidden = list.length > 0;
 

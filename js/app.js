@@ -21,17 +21,24 @@
     return tags;
   };
 
-  window.productCard = function (p) {
+  window.productRow = function (p) {
     var href = "product.html?id=" + encodeURIComponent(p.id);
-    return '<article class="card">' +
-      '<a class="card-media" href="' + href + '" tabindex="-1" aria-hidden="true"><img src="' + esc(p.image) + '" alt="" loading="lazy" decoding="async"></a>' +
-      '<div class="card-body">' +
-      '<span class="card-brand">' + esc(p.brand) + "</span>" +
+    var colored = p.color === "ألوان";
+    return '<article class="row">' +
+      '<a class="row-img" href="' + href + '" tabindex="-1" aria-hidden="true"><img src="' + esc(p.image) + '" alt="" width="96" height="96" loading="lazy" decoding="async"></a>' +
+      '<div class="row-title"><small>' + esc(p.brand) + "</small>" +
       '<h3><a href="' + href + '">' + esc(p.model) + "</a></h3>" +
-      '<ul class="tags">' + window.productTags(p).map(function (t) { return "<li>" + esc(t) + "</li>"; }).join("") + "</ul>" +
-      '<div class="card-actions"><a class="btn btn-wa btn-sm" href="' + esc(window.whatsAppUrl(p)) + '" target="_blank" rel="noopener noreferrer">اسأل عن السعر</a></div>' +
-      "</div></article>";
+      "<p>" + esc(p.kind === "mfp" ? "ماكينة تصوير متعددة الوظائف" : "طابعة ليزر") + "</p></div>" +
+      '<div class="row-meta">' +
+      '<span class="cell"><small>المقاس</small>' + esc(p.format) + "</span>" +
+      '<span class="cell"><small>الطباعة</small><i class="dot' + (colored ? " col" : "") + '"></i>' + esc(p.color) + "</span>" +
+      '<span class="cell"><small>السرعة</small>' + (p.speed ? p.speed + " صفحة/د" : "—") + "</span>" +
+      "</div>" +
+      '<div class="row-act"><a class="btn btn-out btn-sm" href="' + href + '">المواصفات</a>' +
+      '<a class="btn btn-wa btn-sm" href="' + esc(window.whatsAppUrl(p)) + '" target="_blank" rel="noopener noreferrer">اسأل عن السعر</a></div>' +
+      "</article>";
   };
+  window.productCard = window.productRow;
 
   window.kindCount = function (products, key) {
     return products.filter(function (p) {

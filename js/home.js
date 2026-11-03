@@ -15,7 +15,7 @@
       var pool = mfp.length ? mfp : list;
       return pool.slice().sort(function (a, b) { return (b.speed || 0) - (a.speed || 0); })[0];
     }).filter(Boolean);
-    document.getElementById("featuredGrid").innerHTML = featured.map(window.productCard).join("");
+    document.getElementById("featuredGrid").innerHTML = featured.map(window.productRow).join("");
 
     document.getElementById("brandRow").innerHTML = order.map(function (brand) {
       var n = products.filter(function (p) { return p.brand === brand; }).length;
