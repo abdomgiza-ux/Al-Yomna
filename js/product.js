@@ -1,118 +1,68 @@
 (function () {
   "use strict";
+  var esc = window.escapeHtml;
 
-  function escapeHtml(value) {
-    return window.escapeHtml ? window.escapeHtml(value) : String(value);
-  }
+  function notFound() { location.replace("product-not-found.html"); }
 
-  function escapeAttr(value) {
-    return window.escapeAttr ? window.escapeAttr(value) : String(value);
-  }
-
-  function getProductId() {
-    return new URLSearchParams(window.location.search).get("id");
-  }
-
-  function setMeta(product) {
-    var config = window.SITE_CONFIG || {};
-    var title = product.brand + " " + product.model + " | " + (config.name || "اليُمنى للهندسة والتجارة");
+  function setMeta(p) {
+    var title = p.name + " | " + window.SITE_CONFIG.name;
     document.title = title;
-
-    var description = product.description;
-    var descMeta = document.querySelector('meta[name="description"]');
-    var ogTitle = document.querySelector('meta[property="og:title"]');
-    var ogDesc = document.querySelector('meta[property="og:description"]');
-    var ogImage = document.querySelector('meta[property="og:image"]');
-
-    if (descMeta) descMeta.setAttribute("content", description);
-    if (ogTitle) ogTitle.setAttribute("content", title);
-    if (ogDesc) ogDesc.setAttribute("content", description);
-    if (ogImage && window.absoluteUrl) {
-      ogImage.setAttribute("content", window.absoluteUrl(product.image));
-    }
-
-    var canonical = document.querySelector('link[rel="canonical"]');
-    if (canonical) {
-      canonical.setAttribute("href", window.absoluteUrl("product.html?id=" + encodeURIComponent(product.id)));
-    }
-
-    var jsonLd = document.createElement("script");
-    jsonLd.type = "application/ld+json";
-    jsonLd.textContent = JSON.stringify({
+    function set(sel, val) { var el = document.querySelector(sel); if (el) el.setAttribute("content", val); }
+    set('meta[name="description"]', p.description);
+    set('meta[property="og:title"]', title);
+    set('meta[property="og:description"]', p.description);
+    set('meta[property="og:image"]', window.absoluteUrl(p.image));
+    var url = window.absoluteUrl("product.html?id=" + encodeURIComponent(p.id));
+    var link = document.createElement("link");
+    link.rel = "canonical"; link.href = url;
+    document.head.appendChild(link);
+    var ld = document.createElement("script");
+    ld.type = "application/ld+json";
+    ld.textContent = JSON.stringify({
       "@context": "https://schema.org",
       "@type": "Product",
-      "name": product.brand + " " + product.model,
-      "brand": product.brand,
-      "model": product.model,
-      "image": window.absoluteUrl ? window.absoluteUrl(product.image) : product.image,
-      "description": product.description,
-      "offers": {
-        "@type": "Offer",
-        "priceSpecification": {
-          "@type": "PriceSpecification",
-          "priceCurrency": "EGP",
-          "description": "Call For Price"
-        },
-        "availability": "https://schema.org/InStock"
-      }
+      name: p.name,
+      brand: { "@type": "Brand", name: p.brand },
+      model: p.model,
+      image: window.absoluteUrl(p.image),
+      description: p.description,
+      url: url
     });
-    document.head.appendChild(jsonLd);
+    document.head.appendChild(ld);
   }
 
-  function redirectToNotFound() {
-    window.location.replace("product-not-found.html");
+  function specRows(specs) {
+    return specs.map(function (s) {
+      var i = s.indexOf(":");
+      if (i === -1) return "<tr><th>ميزة</th><td>" + esc(s) + "</td></tr>";
+      return "<tr><th>" + esc(s.slice(0, i).trim()) + "</th><td>" + esc(s.slice(i + 1).trim()) + "</td></tr>";
+    }).join("");
   }
 
-  function renderProduct(products) {
-    var id = getProductId();
-    if (!id) {
-      redirectToNotFound();
-      return;
+  window.whenCatalogReady(function (products) {
+    var id = new URLSearchParams(location.search).get("id");
+    var p = products.filter(function (x) { return x.id === id; })[0];
+    if (!p) return notFound();
+    setMeta(p);
+    document.getElementById("crumb").textContent = p.name;
+
+    document.getElementById("detail").innerHTML =
+      '<div class="detail-media"><img src="' + esc(p.image) + '" alt="' + esc(p.name) + '" width="600" height="600"></div>' +
+      "<div>" +
+      '<span class="detail-brand">' + esc(p.brand) + "</span>" +
+      "<h1>" + esc(p.model) + "</h1>" +
+      '<ul class="tags">' + window.productTags(p).map(function (t) { return "<li>" + esc(t) + "</li>"; }).join("") + "</ul>" +
+      '<p class="detail-text">' + esc(p.description) + "</p>" +
+      '<div class="price-box"><div><strong>السعر عند الطلب</strong><small>نرد عليك بالسعر والتوفر على واتساب</small></div>' +
+      '<a class="btn btn-wa" href="' + esc(window.whatsAppUrl(p)) + '" target="_blank" rel="noopener noreferrer">اسأل عن السعر</a></div>' +
+      '<table class="spec-table"><caption>المواصفات</caption><tbody>' + specRows(p.specs) + "</tbody></table>" +
+      '<p class="spec-note">المواصفات حسب بيانات الشركة المصنّعة وقد تختلف قليلًا حسب الإصدار والملحقات. أكّد معنا قبل الشراء.</p>' +
+      "</div>";
+
+    var rel = products.filter(function (x) { return x.brand === p.brand && x.id !== p.id && x.kind === p.kind; }).slice(0, 4);
+    if (rel.length) {
+      document.getElementById("related").innerHTML = rel.map(window.productCard).join("");
+      document.getElementById("relWrap").hidden = false;
     }
-
-    var product = products.find(function (item) { return item.id === id; });
-    if (!product) {
-      redirectToNotFound();
-      return;
-    }
-
-    var detail = document.getElementById("productDetail");
-    var related = document.getElementById("relatedProducts");
-    if (!detail) return;
-
-    setMeta(product);
-
-    var label = product.brand + " " + product.model;
-    detail.innerHTML = [
-      '<div class="detail-media reveal"><img loading="eager" decoding="async" src="' + escapeAttr(product.image) + '" alt="' + escapeAttr(label) + '"></div>',
-      '<article class="detail-content reveal delay-1">',
-      '<p class="eyebrow">' + escapeHtml(product.brand) + "</p>",
-      "<h1>" + escapeHtml(product.model) + "</h1>",
-      "<p>" + escapeHtml(product.description) + "</p>",
-      '<div class="price">' + escapeHtml(product.price) + "</div>",
-      '<ul class="spec-list">',
-      product.specs.map(function (spec) { return "<li>" + escapeHtml(spec) + "</li>"; }).join(""),
-      "</ul>",
-      '<a class="btn btn-whatsapp" href="' + escapeAttr(window.whatsAppUrl(product)) + '" target="_blank" rel="noopener noreferrer">استفسار عبر واتساب</a>',
-      "</article>"
-    ].join("");
-
-    if (related) {
-      var relatedProducts = products.filter(function (item) {
-        return item.brand === product.brand && item.id !== product.id;
-      }).slice(0, 3);
-      related.innerHTML = relatedProducts.map(window.productCard).join("");
-      if (window.observeReveals) window.observeReveals(related);
-    }
-
-    if (window.observeReveals) window.observeReveals(detail);
-  }
-
-  document.addEventListener("DOMContentLoaded", function () {
-    if (typeof window.whenCatalogReady !== "function") {
-      redirectToNotFound();
-      return;
-    }
-    window.whenCatalogReady(renderProduct);
   });
 }());

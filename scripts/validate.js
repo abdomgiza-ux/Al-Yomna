@@ -47,11 +47,11 @@ products.forEach(function (product) {
 });
 ok("product ids and image paths match files on disk");
 
-const brandLogo = path.join(root, "assets", "brand", "logo.jpg");
+const brandLogo = path.join(root, "assets", "brand", "logo.png");
 if (!fs.existsSync(brandLogo)) {
-  fail("missing assets/brand/logo.jpg");
+  fail("missing assets/brand/logo.png");
 } else {
-  ok("brand logo exists at assets/brand/logo.jpg");
+  ok("brand logo exists at assets/brand/logo.png");
 }
 
 const requiredFiles = [

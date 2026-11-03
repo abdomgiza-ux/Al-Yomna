@@ -3,12 +3,12 @@
 
   window.SITE_CONFIG = {
     name: "اليُمنى للهندسة والتجارة",
-    siteUrl: "https://alyomna.com",
+    siteUrl: "https://al-yomna.technolgy.workers.dev",
     whatsapp: "201119800860",
     phone: "+201119800860",
-    phoneDisplay: "+20 11 19800860",
+    phoneDisplay: "+20 111 980 0860",
     brandOrder: ["Ricoh", "Kyocera", "Xerox", "Samsung", "HP", "Konica Minolta"],
-    defaultOgImage: "/assets/hero/warehouse-printers.jpg",
+    defaultOgImage: "/assets/og/share.png",
     productCount: 75
   };
 }());
