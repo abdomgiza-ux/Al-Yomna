@@ -98,19 +98,21 @@ html[dir="rtl"] .finder .btn { border-radius: 6px 0 0 6px; }
   border: 1px solid var(--line); border-radius: var(--r);
   padding: 28px 0 0; overflow: hidden;
 }
-.plate-img { width: 62%; margin-inline: auto; }
+.plate-img { position: relative; width: 56%; margin-inline: auto; container-type: inline-size; }
 .plate-img img { width: 100%; height: auto; }
 .plate-cap { margin-top: 20px; background: var(--navy); color: #fff; padding: 12px 20px; display: flex; justify-content: space-between; gap: 12px; font-size: .95rem; }
 .plate-cap strong { font-family: var(--head); font-weight: 500; }
-.note { position: absolute; display: flex; align-items: center; gap: 0; font-size: .86rem; font-weight: 600; color: var(--navy); white-space: nowrap; }
-.note::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--red); flex: none; box-shadow: 0 0 0 4px rgba(190,21,41,.18); }
-.note span { background: var(--paper); border: 1px solid var(--navy); padding: 1px 10px; border-radius: 4px; }
-.note::after { content: ""; order: -1; width: 28px; height: 1px; background: var(--navy); }
-.note-adf { top: 5%; left: 3%; flex-direction: row-reverse; }
-.note-screen { top: 21%; right: 2%; }
-.note-fin { top: 33%; left: 1%; flex-direction: row-reverse; }
-.note-tray { top: 69%; right: 2%; }
-.note-adf::after, .note-fin::after { order: 2; }
+/* كل تعليق: نقطة على الجزء نفسه، وخط، ثم الاسم */
+.note { position: absolute; display: flex; align-items: center; direction: ltr; transform: translateY(-50%); white-space: nowrap; font-size: .84rem; font-weight: 600; color: var(--navy); }
+.note i { width: 10px; height: 10px; border-radius: 50%; background: var(--red); box-shadow: 0 0 0 4px rgba(190,21,41,.2); flex: none; margin-inline: -5px; position: relative; z-index: 1; }
+.note b { height: 1px; background: var(--navy); width: calc(var(--len) * 1cqw); flex: none; }
+.note span { direction: rtl; background: var(--paper); border: 1px solid var(--navy); padding: 0 10px; border-radius: 4px; line-height: 1.7; }
+.note-r { left: var(--x); top: var(--y); margin-left: 5px; }
+.note-l { right: calc(100% - var(--x)); top: var(--y); flex-direction: row-reverse; margin-right: 5px; }
+.note-adf { --x: 73%; --y: 6%; --len: 28; }
+.note-screen { --x: 62%; --y: 18.5%; --len: 36; }
+.note-fin { --x: 12%; --y: 28%; --len: 5; }
+.note-tray { --x: 60%; --y: 67%; --len: 38; }
 
 /* ---------- أقسام عامة ---------- */
 .block { padding: 72px 0; }
@@ -280,8 +282,7 @@ html[dir="rtl"] .detail h1 { text-align: right; }
 /* حركة: ظهور الواجهة مرة واحدة فقط */
 @media (prefers-reduced-motion: no-preference) {
   .plate-img { animation: rise .7s ease-out both; }
-  .note { animation: pop .4s ease-out both; }
-  .note-screen { animation-delay: .5s; } .note-adf { animation-delay: .65s; } .note-fin { animation-delay: .8s; } .note-tray { animation-delay: .95s; }
+  .note { animation: pop .4s ease-out .6s both; }
   @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
   @keyframes pop { from { opacity: 0; } to { opacity: 1; } }
 }
@@ -321,9 +322,10 @@ html[dir="rtl"] .detail h1 { text-align: right; }
   .finder { flex-direction: column; gap: 10px; }
   html[dir="rtl"] .finder input, .finder input { border: 2px solid var(--navy); border-radius: 6px; }
   .finder .btn, html[dir="rtl"] .finder .btn { border-radius: 6px; }
-  .plate-img { width: 70%; }
-  .note { font-size: .78rem; }
-  .note::after { width: 14px; }
+  .plate-img { width: 58%; }
+  .note { font-size: .68rem; }
+  .note span { padding: 0 5px; }
+  .note-adf { --len: 5; } .note-screen { --len: 8; } .note-tray { --len: 8; } .note-fin { --len: 0; }
   .block { padding: 48px 0; }
   .steps { grid-template-columns: 1fr; gap: 28px; }
   .kinds { grid-template-columns: 1fr; }
