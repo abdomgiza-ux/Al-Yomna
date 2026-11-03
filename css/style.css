@@ -366,3 +366,11 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .foot > div:first-child { grid-column: auto; }
   .closing-acts .btn { width: 100%; }
 }
+
+/* مساعد الاختيار */
+.picker { display: flex; flex-wrap: wrap; gap: 20px 32px; padding: 22px 24px; background: var(--ground); border-top: 2px solid var(--ink); margin-bottom: 20px; }
+.picker .chips { flex-wrap: wrap; }
+.picker-out:empty { display: none; }
+.picker-note { margin-top: 14px; color: var(--muted); font-size: .94rem; }
+.picker-note a { color: var(--ink); font-weight: 600; }
+fieldset.field { border: 0; margin: 0; padding: 0; min-width: 0; }

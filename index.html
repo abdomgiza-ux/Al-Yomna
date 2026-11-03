@@ -73,6 +73,20 @@
   </div>
 </section>
 
+<section class="block" aria-labelledby="pick-h">
+  <div class="wrap">
+    <div class="block-head"><div><h2 id="pick-h">مش عارف تختار؟ جاوب على ٤ أسئلة</h2><p>هنرشّح لك أجهزة مناسبة لحجم شغلك. الترشيح تقريبي، وبنأكده معاك على واتساب.</p></div></div>
+    <form class="picker" id="picker" onsubmit="return false">
+      <fieldset class="field"><legend>محتاج إيه؟</legend><div class="chips"><label><input type="radio" name="pk" value="mfp" checked><span>ماكينة تصوير</span></label><label><input type="radio" name="pk" value="prn"><span>طابعة فقط</span></label></div></fieldset>
+      <fieldset class="field"><legend>الطباعة</legend><div class="chips"><label><input type="radio" name="pc" value="ألوان" checked><span>ألوان</span></label><label><input type="radio" name="pc" value="أبيض وأسود"><span>أبيض وأسود</span></label></div></fieldset>
+      <fieldset class="field"><legend>المقاس</legend><div class="chips"><label><input type="radio" name="pf" value="A4" checked><span>A4</span></label><label><input type="radio" name="pf" value="A3"><span>A3</span></label></div></fieldset>
+      <fieldset class="field"><legend>كام صفحة في الشهر تقريبًا؟</legend><div class="chips"><label><input type="radio" name="pv" value="1" checked><span>أقل من 5,000</span></label><label><input type="radio" name="pv" value="2"><span>5,000 – 20,000</span></label><label><input type="radio" name="pv" value="3"><span>20,000 – 50,000</span></label><label><input type="radio" name="pv" value="4"><span>أكتر من 50,000</span></label></div></fieldset>
+    </form>
+    <div class="rows picker-out" id="pickerOut" aria-live="polite"></div>
+    <p class="picker-note" id="pickerNote"></p>
+  </div>
+</section>
+
 <section class="block" aria-labelledby="feat-h">
   <div class="wrap">
     <div class="block-head"><div><h2 id="feat-h">أجهزة من كل ماركة</h2><p>اختيار من الكتالوج. كل جهاز له صفحة بمواصفاته.</p></div><a class="more" href="products.html">كل المنتجات</a></div>
