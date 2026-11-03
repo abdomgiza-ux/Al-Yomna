@@ -249,12 +249,24 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .form textarea { min-height: 130px; resize: vertical; }
 .form label { display: block; font-weight: 600; font-size: .94rem; margin-bottom: 6px; }
 .form-note { color: var(--muted); font-size: .9rem; }
-.brand-block { border-top: 2px solid var(--ink); padding: 20px 0 28px; }
-.brand-block header { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
-.brand-block h2 { font-size: 1.5rem; direction: ltr; font-weight: 700; }
-.brand-models { display: flex; flex-wrap: wrap; gap: 8px; }
-.brand-models a { border: 1px solid var(--line); padding: 2px 14px; text-decoration: none; font-weight: 500; font-size: .95rem; direction: ltr; }
-.brand-models a:hover { background: var(--ink); border-color: var(--ink); color: #fff; }
+.brand-nav { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+.brand-nav a { border: 1px solid var(--ink); padding: 2px 16px; text-decoration: none; font-weight: 600; direction: ltr; background: var(--paper); }
+.brand-nav a span { color: var(--red); font-size: .85rem; margin-inline-start: 6px; }
+.brand-nav a:hover { background: var(--ink); color: #fff; }
+.brand-nav a:hover span { color: #ffb4bc; }
+.brand-list { padding-bottom: 80px; }
+.brand-block { border-top: 2px solid var(--ink); padding: 28px 0 40px; scroll-margin-top: 90px; }
+.brand-block header { display: flex; align-items: baseline; gap: 16px; margin-bottom: 20px; }
+.brand-block h2 { font-size: 1.8rem; direction: ltr; font-weight: 700; }
+.brand-block header span { color: var(--muted); }
+.tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.tile { min-width: 0; border: 1px solid var(--line); text-decoration: none; display: flex; flex-direction: column; gap: 2px; padding-bottom: 12px; transition: border-color .15s; }
+.tile:hover { border-color: var(--ink); }
+.tile-img { display: block; position: relative; aspect-ratio: 1; border-bottom: 1px solid var(--line); margin-bottom: 10px; }
+.tile-img img { position: absolute; inset: 14px; width: calc(100% - 28px); height: calc(100% - 28px); object-fit: contain; }
+.tile strong { padding-inline: 14px; font-family: var(--head); font-weight: 600; font-size: 1rem; direction: ltr; text-align: right; line-height: 1.5; }
+.tile small { padding-inline: 14px; color: var(--muted); font-size: .85rem; line-height: 1.6; }
+.brand-more { margin-top: 20px; }
 .center-page { text-align: center; padding: 96px 0 120px; }
 .center-page h1 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 700; }
 .center-page p { margin: 14px auto 28px; color: var(--muted); max-width: 46ch; }
@@ -297,6 +309,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .brand-wall a:nth-child(n+4) { border-top: 1px solid var(--line); }
 }
 @media (max-width: 860px) {
+  .tiles { grid-template-columns: repeat(3, 1fr); }
   .hero-grid, .detail, .two { grid-template-columns: 1fr; gap: 36px; }
   .detail-media { position: static; }
   .services { grid-template-columns: 1fr 1fr; }
@@ -311,6 +324,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .foot > div:first-child { grid-column: span 2; }
 }
 @media (max-width: 760px) {
+  .tiles { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .brand-block h2 { font-size: 1.5rem; }
   body { font-size: 1rem; }
   .menu-btn { display: inline-block; }
   .bar { min-height: 64px; gap: 12px; flex-wrap: wrap; padding-block: 10px; }
